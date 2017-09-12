@@ -41,8 +41,9 @@ Configuration
 This plugin adds 2 options to hiera-eyaml:
 
 ```
---kms-key-id=<s>            KMS Key ID (default: )
---kms-aws-region=<s>        AWS Region (default: ap-southeast-2)
+--kms-key-id=<s>            KMS Key ID  (default: )
+--kms-aws-region=<s>        AWS Region  (default: ap-southeast-2)
+--kms-aws-profile=<s>       AWS Profile (default: default)
 ```
 
 To avoid passing CLI parameters every call to eyaml, you can create a config file to set the defaults.
@@ -55,9 +56,11 @@ Example:
 ---
 kms_key_id: '00000000-0000-0000-0000-000000000000'
 kms_aws_region: 'us-west-1'
+kms_aws_profile: 'your-profile'
 ```
 
 Authors
 =======
 
 - [Allan Denot](http://github.com/adenot)
+
