@@ -2,7 +2,7 @@ require 'openssl'
 require 'hiera/backend/eyaml/encryptor'
 require 'hiera/backend/eyaml/utils'
 require 'hiera/backend/eyaml/options'
-require 'aws-sdk'
+require 'aws-sdk-kms'
 
 class Hiera
   module Backend
@@ -26,18 +26,15 @@ class Hiera
           VERSION = "0.2"
           self.tag = "KMS"
 
-         
-
           def self.encrypt plaintext
             aws_profile = self.option :aws_profile
-            credentials = Aws::SharedCredentials.new(profile_name: aws_profile)
             aws_region = self.option :aws_region
             key_id = self.option :key_id
             raise StandardError, "key_id is not defined" unless key_id
 
             @kms = ::Aws::KMS::Client.new(
+              profile: aws_profile,
               region: aws_region,
-              credentials: credentials,
             )
 
             resp = @kms.encrypt({
@@ -50,12 +47,11 @@ class Hiera
 
           def self.decrypt ciphertext
             aws_profile = self.option :aws_profile
-            credentials = Aws::SharedCredentials.new(profile_name: aws_profile)
             aws_region = self.option :aws_region
 
             @kms = ::Aws::KMS::Client.new(
+              profile: aws_profile,
               region: aws_region,
-              credentials: credentials,
             )
 
             resp = @kms.decrypt({
