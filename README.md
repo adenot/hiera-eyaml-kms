@@ -59,8 +59,12 @@ kms_aws_region: 'us-west-1'
 kms_aws_profile: 'your-profile'
 ```
 
+EC2 Instance Profile:
+
+The aws-sdk will use an EC2 Instance Profile if one is present and an AWS profile is not specified.
+
+
 Authors
 =======
 
 - [Allan Denot](http://github.com/adenot)
-
