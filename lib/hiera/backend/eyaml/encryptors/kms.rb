@@ -10,32 +10,20 @@ class Hiera
       module Encryptors
 
         class Kms < Encryptor
-
           self.options = {
             :key_id => {      :desc => "KMS Key ID",
                               :type => :string,
                               :default => "" },
-            :aws_region => {  :desc => "AWS Region",
-                              :type => :string,
-                              :default => "ap-southeast-2" },
-            :aws_profile => { :desc => "AWS Account",
-                              :type => :string,
-                              :default => "default"}
           }
 
-          VERSION = "0.2"
+          VERSION = "0.3"
           self.tag = "KMS"
 
           def self.encrypt plaintext
-            aws_profile = self.option :aws_profile
-            aws_region = self.option :aws_region
             key_id = self.option :key_id
             raise StandardError, "key_id is not defined" unless key_id
 
-            @kms = ::Aws::KMS::Client.new(
-              profile: aws_profile,
-              region: aws_region,
-            )
+            @kms = ::Aws::KMS::Client.new()
 
             resp = @kms.encrypt({
               key_id: key_id,
@@ -46,13 +34,7 @@ class Hiera
           end
 
           def self.decrypt ciphertext
-            aws_profile = self.option :aws_profile
-            aws_region = self.option :aws_region
-
-            @kms = ::Aws::KMS::Client.new(
-              profile: aws_profile,
-              region: aws_region,
-            )
+            @kms = ::Aws::KMS::Client.new()
 
             resp = @kms.decrypt({
               ciphertext_blob: ciphertext
